@@ -1,8 +1,8 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const dbClinet = require('../data/dbm');
 const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+
 const fs = require('fs');
 
 // app.get('/', (req, res) => {
@@ -24,23 +24,23 @@ const fs = require('fs');
 //     fs.writeFileSync("data/employees.json", JSON.stringify(json));
 //     res.send("Success !!!");
 // });
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     dbClinet('restaurants', async collection =>{
         const list = await collection.find(req.query).toArray()
         res.json(list);
     })
 });
-app.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     dbClinet('restaurants', async collection =>{
         const list = await collection.findById(req.params.id).toArray()
         res.json(list);
     })
 });
 
-app.post('/', (req, res) => {
+router.post('/', (req, res) => {
     dbClinet('restaurants', async collection => {
     const result =await collection.insertOne(req.body);
     res.json(result);
   })
 });
-module.exports = app;
+module.exports = router;
